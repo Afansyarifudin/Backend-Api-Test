@@ -27,11 +27,11 @@ go get github.com/cosmtrek/air
         POST("/login") login
 
     User Routes:
-        GET("/admin/users") get all profiles
-        GET("/admin/users/:id") get photo by Id
-        POST("/admin/users") Create profile
-        PUT("/admin/users/:id") update profile
-        DELETE("/admin/users/:id") delete profile
+        GET("/admin/users") get all users
+        GET("/admin/users/:id") get user by Id
+        POST("/admin/users") Create user
+        PUT("/admin/users/:id") update user
+        DELETE("/admin/users/:id") delete user
 
 ## Api docs Swagger
 
