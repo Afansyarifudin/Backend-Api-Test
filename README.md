@@ -6,11 +6,11 @@ This is a project of RESTFull API using Go language and detailed tech stack belo
 | Tech | Used as |
 | ------------- | ------------- |
 | Echo | web framework in Go |
-| Postgressql | Dataabase |
+| Postgresql | Database |
 | Swagger | API Spec Docs |
 | ORM Gorm | ORM Library in Go |
 | Json Web Token (JWT) | encrypt auth |
-| Docker | Container Package to run[soon] |
+| Docker | Container Package |
 
 ## Library
 
