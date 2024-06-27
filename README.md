@@ -1,8 +1,16 @@
-# Backend API Golang
+# Backend REST-API Golang
 
-## Applying hot-reload
+## Description
 
-`air`
+This is a project of RESTFull API using Go language and detailed tech stack below
+| Tech | Used as |
+| ------------- | ------------- |
+| Echo | web framework in Go |
+| Postgressql | Dataabase |
+| Swagger | API Spec Docs |
+| ORM Gorm | ORM Library in Go |
+| Json Web Token (JWT) | encrypt auth |
+| Docker | Container Package to run[soon] |
 
 ## Library
 
