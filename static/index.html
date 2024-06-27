@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD REST API-Golang</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1,
+        h2 {
+            color: #333;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+
+        input {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            border-radius: 10%;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 9px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>CRUD REST API-Golang</h1>
+
+    <!-- table head for list all user -->
+    <h2>List All Users</h2>
+    <button id="get-users">Fetch All Users</button>
+    <button id="show-add-form">Add User</button>
+    <table id="users-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Date of Birth</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <!-- Form for add table  -->
+    <h2>Form Add User</h2>
+    <form id="add-user-form">
+        <label for="add-name">Name:</label>
+        <input type="text" id="add-name" name="name" required><br>
+
+        <label for="add-email">Email:</label>
+        <input type="email" id="add-email" name="email" required><br>
+
+        <label for="add-dob">Date of Birth:</label>
+        <input type="date" id="add-dob" name="date_of_birth" required><br>
+
+        <label for="add-age">Age:</label>
+        <input type="number" id="add-age" name="age" required><br>
+
+        <label for="add-password">Password:</label>
+        <input type="password" id="add-password" name="password" required><br>
+
+        <button type="submit">Add User</button>
+    </form>
+
+    <!-- form to view detail data -->
+    <h2>Form View User</h2>
+    <form id="view-user-form">
+        <label for="view-id">ID:</label>
+        <input type="text" id="view-id" name="id" readonly><br>
+
+        <label for="view-name">Name:</label>
+        <input type="text" id="view-name" name="name" readonly><br>
+
+        <label for="view-email">Email:</label>
+        <input type="email" id="view-email" name="email" readonly><br>
+
+        <label for="view-dob">Date of Birth:</label>
+        <input type="date" id="view-dob" name="date_of_birth" readonly><br>
+
+        <label for="view-age">Age:</label>
+        <input type="number" id="view-age" name="age" readonly><br>
+
+        <button type="button" onclick="document.getElementById('view-user-form').style.display='none'">Close</button>
+    </form>
+
+    <!-- form to edit user data -->
+    <h2>Form Edit User</h2>
+    <form id="edit-user-form">
+        <label for="edit-id">ID:</label>
+        <input type="text" id="edit-id" name="id" readonly><br>
+
+        <label for="edit-name">Name:</label>
+        <input type="text" id="edit-name" name="name" required><br>
+
+        <label for="edit-email">Email:</label>
+        <input type="email" id="edit-email" name="email" required><br>
+
+        <label for="edit-dob">Date of Birth:</label>
+        <input type="date" id="edit-dob" name="date_of_birth" required><br>
+
+        <label for="edit-age">Age:</label>
+        <input type="number" id="edit-age" name="age" required><br>
+
+        <label for="edit-password">Password:</label>
+        <input type="password" id="edit-password" name="password"><br>
+
+        <button type="submit">Save Changes</button>
+        <button type="button" onclick="document.getElementById('edit-user-form').style.display='none'">Cancel</button>
+    </form>
+
+    <script>
+        // Show the add user form
+        document.getElementById('show-add-form').addEventListener('click', () => {
+            document.getElementById('add-user-form').style.display = 'block';
+            document.getElementById('view-user-form').style.display = 'none';
+            document.getElementById('edit-user-form').style.display = 'none';
+        });
+
+        document.getElementById('get-users').addEventListener('click', async () => {
+            // fetch all users data
+            const response = await fetch('http://localhost:3000/api/v1/admin/users', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            // Cek data
+            console.log(result);
+            // add data in tbody 
+            const usersTableBody = document.querySelector('#users-table tbody');
+            usersTableBody.innerHTML = '';
+
+            if (result.data) {
+                result.data.forEach(user => {
+                    console.log(user);
+                    const userRow = document.createElement('tr');
+                    userRow.innerHTML = `
+                        <td>${user.id}</td>
+                        <td>${user.name}</td>
+                        <td>${user.email}</td>
+                        <td>${user.age}</td>
+                        <td>${user.date_of_birth}</td>
+                        <td>
+                            <button onclick="viewUser(${user.id})">View</button>
+                            <button onclick="editUser(${user.id})">Edit</button>
+                            <button onclick="confirmDeleteUser(${user.id})">Delete</button>
+                        </td>
+                    `;
+                    usersTableBody.appendChild(userRow);
+                });
+            } else {
+                usersTableBody.innerHTML = '<tr><td colspan="6">No users found.</td></tr>';
+            }
+        });
+
+        document.getElementById('add-user-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            // get value to the form to store data 
+            const name = document.getElementById('add-name').value;
+            const email = document.getElementById('add-email').value;
+            const date_of_birth = document.getElementById('add-dob').value;
+            const age = document.getElementById('add-age').value;
+            const password = document.getElementById('add-password').value;
+
+            const response = await fetch('http://localhost:3000/api/v1/admin/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    date_of_birth,
+                    age,
+                    password
+                }),
+            });
+
+            const result = await response.json();
+            alert(JSON.stringify(result));
+            document.getElementById('add-user-form').reset();
+            document.getElementById('add-user-form').style.display = 'none';
+            document.getElementById('get-users').click();
+        });
+
+        // view user data 
+        async function viewUser(id) {
+            const response = await fetch(`http://localhost:3000/api/v1/admin/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            if (result.data) {
+                const user = result.data;
+                document.getElementById('view-id').value = user.id;
+                document.getElementById('view-name').value = user.name;
+                document.getElementById('view-email').value = user.email;
+                document.getElementById('view-dob').value = user.date_of_birth;
+                document.getElementById('view-age').value = user.age;
+                document.getElementById('view-user-form').style.display = 'block';
+                document.getElementById('add-user-form').style.display = 'none';
+                document.getElementById('edit-user-form').style.display = 'none';
+            }
+        }
+
+        // edit user data 
+        async function editUser(id) {
+            const response = await fetch(`http://localhost:3000/api/v1/admin/users/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            if (result.data) {
+                const user = result.data;
+                document.getElementById('edit-id').value = user.id;
+                document.getElementById('edit-name').value = user.name;
+                document.getElementById('edit-email').value = user.email;
+                document.getElementById('edit-dob').value = user.date_of_birth;
+                document.getElementById('edit-age').value = user.age;
+                document.getElementById('edit-password').value =
+                    ''; // Password is not pre-filled for security reasons
+                document.getElementById('edit-user-form').style.display = 'block';
+                document.getElementById('add-user-form').style.display = 'none';
+                document.getElementById('view-user-form').style.display = 'none';
+            }
+        }
+
+        // add form view data user 
+        document.getElementById('edit-user-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const id = document.getElementById('edit-id').value;
+            const name = document.getElementById('edit-name').value;
+            const email = document.getElementById('edit-email').value;
+            const date_of_birth = document.getElementById('edit-dob').value;
+            const age = document.getElementById('edit-age').value;
+            const password = document.getElementById('edit-password').value;
+
+            const body = {
+                name,
+                email,
+                date_of_birth,
+                age
+            };
+
+            if (password) {
+                body.password = password;
+            }
+
+            const response = await fetch(`http://localhost:3000/api/v1/admin/users/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(body),
+            });
+
+            const result = await response.json();
+            alert(JSON.stringify(result));
+            document.getElementById('edit-user-form').style.display = 'none';
+            document.getElementById('get-users').click();
+        });
+
+        // pup-up delete user data  
+        async function confirmDeleteUser(id) {
+            const confirmation = confirm("Are you sure want to delete this data? ")
+            if (confirmation) {
+                deleteUser(id)
+            }
+        }
+        // delete user 
+        async function deleteUser(id) {
+            const response = await fetch(`http://localhost:3000/api/v1/admin/users/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            const result = await response.json();
+            alert(JSON.stringify(result));
+            document.getElementById('get-users').click();
+        }
+    </script>
+</body>
+
+</html>
