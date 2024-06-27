@@ -16,6 +16,9 @@ go get github.com/labstack/echo/v4/middleware
 go get github.com/labstack/echo-jwt/v4
 go get github.com/go-playground/validator/v10
 go get github.com/cosmtrek/air
+go get -u github.com/swaggo/echo-swagger
+go get -d github.com/swaggo/swag/cmd/swag
+go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
 ## API List
