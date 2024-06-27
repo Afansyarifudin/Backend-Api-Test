@@ -20,20 +20,24 @@ go get github.com/cosmtrek/air
 
 ## API List
 
-http://localhost:3000/api/v1
+    http://localhost:3000/api/v1
 
-    User Routes :
-    POST("/register") register user
-    POST("/login") login
-    GET("/admin/users") get all profiles
-    GET("/admin/users/:id") get photo by Id
-    POST("/admin/users") Create profile
-    PUT("/admin/users/:id") update profile
-    DELETE("/admin/users/:id") delete profile
+Auth Routes :
+POST("/register") register user
+POST("/login") login
+
+User Routes:
+GET("/admin/users") get all profiles
+GET("/admin/users/:id") get photo by Id
+POST("/admin/users") Create profile
+PUT("/admin/users/:id") update profile
+DELETE("/admin/users/:id") delete profile
 
 ## Api docs Swagger
 
     GET("/docs/swagger/index.html#/") Swagger Docs
+
+    http://localhost:3000/api/v1/docs/swagger/index.html#/
 
 ## Mock Data
 
@@ -74,18 +78,14 @@ http://localhost:3000/api/v1
 }
 ```
 
-```Create new user
+```Create new user - Payload
 {
 {
-  "status": true,
-  "message": "success create user",
-  "data": {
-    "id": 4,
-    "name": "Nur Afan Syarifudin",
-    "email": "afan109@gmail.com",
-    "age": "4",
-    "date_of_birth": "10-20-2021"
-  }
+  "age": "string",
+  "date_of_birth": "string",
+  "email": "string",
+  "name": "string",
+  "password": "string"
 }
 }
 ```
